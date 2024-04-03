@@ -262,10 +262,10 @@ tcpdump -i eth1  ip and icmp -dd
 //tcp option for SPA
 int g_tcp_spa = 0;
 typedef struct tcpopt_data {
-    __u8 opcode;
-    __u8 opsize;
-    __u16 reserve;
-    __u32 csum;
+    uint8_t opcode;
+    uint8_t opsize;
+    uint16_t reserve;
+    uint32_t csum;
 }tcpopt_data_t;
 
 #define TCPOPT_SPA      233  
