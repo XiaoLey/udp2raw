@@ -55,7 +55,7 @@ int server_on_timer_multi(conn_info_t &conn_info)  // for server. called when a 
         }
 
         if (hb_mode == 0)
-            send_safer(conn_info, 'h', hb_buf, 0);  /////////////send
+            send_safer(conn_info, 'h', hb_buf, hb_len);  /////////////send
         else
             send_safer(conn_info, 'h', hb_buf, hb_len);
         conn_info.last_hb_sent_time = get_current_time();
@@ -232,7 +232,7 @@ int server_on_raw_recv_pre_ready(conn_info_t &conn_info, char *ip_port, u32_t tm
         conn_info.last_hb_sent_time = conn_info.last_hb_recv_time;  //=get_current_time()
 
         if (hb_mode == 0)
-            send_safer(conn_info, 'h', hb_buf, 0);  /////////////send
+            send_safer(conn_info, 'h', hb_buf, hb_len);  /////////////send
         else
             send_safer(conn_info, 'h', hb_buf, hb_len);
 
@@ -293,7 +293,7 @@ int server_on_raw_recv_pre_ready(conn_info_t &conn_info, char *ip_port, u32_t tm
             // send_safer(ori_conn_info, 'h',hb_buf, hb_len);
             // ori_conn_info.blob->anti_replay.re_init();
             if (hb_mode == 0)
-                send_safer(ori_conn_info, 'h', hb_buf, 0);  /////////////send
+                send_safer(ori_conn_info, 'h', hb_buf, hb_len);  /////////////send
             else
                 send_safer(ori_conn_info, 'h', hb_buf, hb_len);
 

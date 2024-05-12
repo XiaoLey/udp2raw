@@ -298,7 +298,7 @@ int client_on_timer(conn_info_t &conn_info)  // for client. called when a timer 
         mylog(log_debug, "heartbeat sent <%x,%x>\n", conn_info.oppsite_id, conn_info.my_id);
 
         if (hb_mode == 0)
-            send_safer(conn_info, 'h', hb_buf, 0);  /////////////send
+            send_safer(conn_info, 'h', hb_buf, hb_len);  /////////////send
         else
             send_safer(conn_info, 'h', hb_buf, hb_len);
         conn_info.last_hb_sent_time = get_current_time();
