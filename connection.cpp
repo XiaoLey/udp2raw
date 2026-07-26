@@ -21,11 +21,11 @@ anti_replay_seq_t anti_replay_t::get_new_seq_for_send() {
 anti_replay_t::anti_replay_t() {
     max_packet_received = 0;
     anti_replay_seq = get_true_random_number_64() / 10;  // random first seq
-    // memset(window,0,sizeof(window)); //not necessary
+    memset(window, 0, sizeof(window));
 }
 void anti_replay_t::re_init() {
     max_packet_received = 0;
-    // memset(window,0,sizeof(window));
+    memset(window, 0, sizeof(window));
 }
 
 int anti_replay_t::is_vaild(u64_t seq) {

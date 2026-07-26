@@ -52,7 +52,7 @@ struct conv_manager_t  // manage the udp connections
 
     conv_manager_t() {
         // clear_it=conv_last_active_time.begin();
-        long long last_clear_time = 0;
+        last_clear_time = 0;
         additional_clear_function = 0;
     }
     ~conv_manager_t() {
