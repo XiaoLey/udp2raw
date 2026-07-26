@@ -1,0 +1,5 @@
+# 构建产物(makefile 生成)
+git_version.h
+version.txt
+udp2raw
+udp2raw_*
