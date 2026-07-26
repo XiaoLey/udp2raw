@@ -35,6 +35,8 @@ sudo yum groupinstall 'Development Tools'
 
 然后运行make，编译完成。 生成的udp2raw就是编译好的bianry。
 
+如果想编译去掉调试信息（debug symbols）的版本，执行`make release_local`，产物体积更小，适合分发。
+
 ## 需要交叉编译的平台
 比如各种openwrt路由器
 

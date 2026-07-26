@@ -38,6 +38,8 @@ sudo yum groupinstall 'Development Tools'
 
 run 'make'，compilation done. the udp2raw file is the just compiled binary
 
+run 'make release_local' instead if you want a stripped binary without debug symbols, which is smaller and suitable for distribution
+
 ### platform which needs cross-compile
 such as openwrt router,run following instructions on your PC
 
