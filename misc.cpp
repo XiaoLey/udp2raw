@@ -107,7 +107,7 @@ int process_lower_level_arg()  // handle --lower-level option
     lower_level = 1;
     u32_t hw[6];
     memset(hw, 0, sizeof(hw));
-    sscanf(optarg, "%[^#]#%x:%x:%x:%x:%x:%x", if_name, &hw[0], &hw[1], &hw[2],
+    sscanf(optarg, "%99[^#]#%x:%x:%x:%x:%x:%x", if_name, &hw[0], &hw[1], &hw[2],
            &hw[3], &hw[4], &hw[5]);
 
     mylog(log_warn,
@@ -452,7 +452,7 @@ void process_arg(int argc, char *argv[])  // process all options
                 break;
             case 'k':
                 mylog(log_debug, "parsing key option\n");
-                sscanf(optarg, "%s", key_string);
+                sscanf(optarg, "%999s", key_string);
                 break;
             case 1:
                 mylog(log_debug, "option_index: %d\n", option_index);
@@ -579,7 +579,7 @@ void process_arg(int argc, char *argv[])  // process all options
                     debug_flag = 1;
                     // enable_log_color=0;
                 } else if (strcmp(long_options[option_index].name, "dev") == 0) {
-                    sscanf(optarg, "%s", dev);
+                    sscanf(optarg, "%99s", dev);
                     // enable_log_color=0;
                     mylog(log_info, "dev=[%s]\n", dev);
                 } else if (strcmp(long_options[option_index].name, "debug-resend") == 0) {
@@ -629,7 +629,7 @@ void process_arg(int argc, char *argv[])  // process all options
                         mylog(log_fatal, "--fifo not supported in this version\n");
                         myexit(-1);
                     }
-                    sscanf(optarg, "%s", fifo_file);
+                    sscanf(optarg, "%999s", fifo_file);
 
                     mylog(log_info, "fifo_file =%s \n", fifo_file);
                 } else if (strcmp(long_options[option_index].name, "conf-file") == 0) {
@@ -774,7 +774,7 @@ void pre_process_arg(int argc, char *argv[])  // mainly for load conf file
         if (strcmp(argv[i], "--conf-file") == 0) {
             count++;
             pos = i;
-            if (i == argc) {
+            if (i == argc - 1) {
                 mylog(log_fatal, "--conf-file need a parameter\n");
                 myexit(-1);
             }

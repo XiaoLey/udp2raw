@@ -53,7 +53,7 @@ int aes128cfb_old = 0;
 // TODO key negotiation and forward secrecy
 
 int my_init_keys(const char *user_passwd, int is_client) {
-    char tmp[1000] = "";
+    char tmp[1005] = "";
     int len = strlen(user_passwd);
 
     strcat(tmp, user_passwd);

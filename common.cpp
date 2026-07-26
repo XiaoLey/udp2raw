@@ -22,11 +22,11 @@ int address_t::from_str(char *str) {
     u32_t port;
     mylog(log_info, "parsing address: %s\n", str);
     int is_ipv6 = 0;
-    if (sscanf(str, "[%[^]]]:%u", ip_addr_str, &port) == 2) {
+    if (sscanf(str, "[%99[^]]]:%u", ip_addr_str, &port) == 2) {
         mylog(log_info, "its an ipv6 adress\n");
         inner.ipv6.sin6_family = AF_INET6;
         is_ipv6 = 1;
-    } else if (sscanf(str, "%[^:]:%u", ip_addr_str, &port) == 2) {
+    } else if (sscanf(str, "%99[^:]:%u", ip_addr_str, &port) == 2) {
         mylog(log_info, "its an ipv4 adress\n");
         inner.ipv4.sin_family = AF_INET;
     } else {
