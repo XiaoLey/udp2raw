@@ -350,6 +350,8 @@ void process_arg(int argc, char *argv[])  // process all options
     // string dummy="";
     for (i = +1; i < argc; i++) {
         if (argv[i][0] != '-') continue;
+        // 负数是合法的选项值(如--max-rst-allowed -1),不当选项校验
+        if (argv[i][1] >= '0' && argv[i][1] <= '9') continue;
         string a = argv[i];
         if (a[0] == '-' && a[1] != '-')
             a = dummy + a[0] + a[1];
