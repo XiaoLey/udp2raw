@@ -30,7 +30,7 @@
 
 **度的把握：砍掉真没必要的，保留真必需的，不是为砍而砍**
 
-- 对实现的复述、执行步骤、内部机制命名、「为什么」的缘由——砍
+- 文档注释中对实现的复述、执行步骤、内部机制命名、「为什么」的缘由——砍；代码块的目的和约束放在块级注释中
 - 改已有代码时只动必要的字，别把变更理由写进注释、把原本简短的注释扩写成一段——变更理由放 commit message
 - 专业算法、领域性强、不写就看不懂的部分——必须写，该详细就详细
 - 输入/输出的数据形状、字段语义等帮助理解契约的信息——保留
@@ -61,14 +61,17 @@
 - 函数体内按逻辑块分段：连续做同一件事的代码写成一块，块与块之间空一行；没有注释的代码块同样空行分隔
 - 常见断点：前置校验之后、不同目的的步骤之间、循环或分支组前后、收尾与返回之前
 - 别拆过头：只有几行、单一目的的函数不用分块；块间空一行就够，别连空两行
-- 逻辑较复杂的代码块必须有一行简短注释，让人一眼知道这段在做什么；拿不准时偏向写
-- 简单且一目了然的代码不加注释（如简单赋值、`i += 1`、直白的列表推导）
+- 除下述可省略的情况外，每个逻辑块都必须在块首加一行简短注释，说明这块要完成什么或有什么非显而易见的约束，让读者不必逐行推演就能看出各块的职责；写意图，别只复述语法
+- 多步骤的函数或脚本必须能通过块首注释看出主要处理阶段，不能整段仅靠空行分隔；长循环或分支内部同样按职责分块并注释，不能只在外层写一条总注释代替内部各块的说明
+- 只有几行、单一目的且整块职责和意图从代码本身就能直接看出的块才省略注释；不能仅因每行代码简单或自己能看懂就省略，拿不准时偏向写
+- 不给简单赋值、`i += 1`、直接返回等一目了然的语句逐句配注释，也不为加注释而把它们拆成独立块
 - 注释默认简短；只有警告、坑、非显而易见的前提才多写几句
 - 别在注释里写「日记」：修改记录、变更日期与原因、调试历程等历史信息放 commit message，注释只描述代码当前的行为与意图
 - 别在注释里反思 / 记录自己犯过的错（「一开始写成 X」「之前踩坑」「调试发现」）——坑写成客观事实（「X 必须放顶层，放进 Y 会被忽略」），不写你怎么踩出来的；个人经历放 commit message
 - 取舍写所选方案的约束，不写放弃其它方案的理由——为缺失辩护（「为什么没加某项」）进 commit message，不进注释
 - 别在注释里引用别处有「单点真相」的具体事实（键位名、配置项、路径、常量值等）——事实变了注释不会跟着变，写意图就够，具体值让它的归属处自己说
-- 想写详细时，优先把大块拆成几个小块分别加注释，而不是堆一段长注释
+- 大块代码先按职责拆成几个小块，再分别加简短注释，不以是否准备写长注释为前提；不要用一段长注释代替分块，专业算法、警告和非显而易见的前提等必要的详细说明仍保留
+- 交付前逐块回看：不同职责是否已空行分隔、每块是否已有意图注释或确实符合上述省略条件，长循环和分支内部也同样检查；不符合时补齐，不把“自己能看懂”当作通过标准
 
 ```python
 # 反例：块之间不空行，整段挤在一起
@@ -78,26 +81,46 @@ def search(query: str, top: int) -> list[str]:
     key = cache_key(query, top)
     cached = cache.get(key)
     if cached is not None:
-        return cached
+        return cached[:top]
     results = api.search(query)
     cache.set(key, results)
     return results[:top]
 
 
-# 正例：同一段代码按块空行，不靠注释也分得开
+# 正例：按职责分块并标注意图；直观的校验和返回不加注释
 def search(query: str, top: int) -> list[str]:
     if not query:
         raise ValueError("query 为空")
 
+    # 优先复用相同查询参数的结果
     key = cache_key(query, top)
     cached = cache.get(key)
     if cached is not None:
-        return cached
+        return cached[:top]
 
+    # 保留完整结果，供后续查询复用
     results = api.search(query)
     cache.set(key, results)
 
     return results[:top]
+
+
+# 正例：循环内部的不同职责也分别分块并标注意图
+def group_messages(rows: list[dict[str, str]]) -> dict[str, list[str]]:
+    grouped: dict[str, list[str]] = {}
+    for row in rows:
+        # 仅接纳收件人和正文都有效的消息
+        recipient = row["recipient"].strip()
+        message = row["message"].strip()
+        if not recipient or not message:
+            continue
+
+        # 同一收件人的重复消息只保留一份
+        messages = grouped.setdefault(recipient, [])
+        if message not in messages:
+            messages.append(message)
+
+    return grouped
 ```
 
 ## 代码组织
